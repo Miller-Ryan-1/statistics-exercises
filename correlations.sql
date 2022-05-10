@@ -1,3 +1,5 @@
+-- Correlations Exercises
+
 USE employees;
 
 SELECT 
@@ -16,11 +18,11 @@ FROM
 
 SELECT 
     employees.emp_no,
-    MAX(DATEDIFF(IF(salaries.to_date > NOW(),
+    MAX(DATEDIFF(IF(titles.to_date > NOW(),
                 NOW(),
-                salaries.to_date),
+                titles.to_date),
             employees.hire_date) / 365) AS Tenure,
-    COUNT(titles.title)
+    COUNT(titles.title) AS Titles
 FROM
     employees
         JOIN
@@ -28,7 +30,26 @@ FROM
         JOIN
     titles USING (emp_no)
     GROUP BY emp_no;
-    
 
--- Wow, almost forgot about the dash dash aready.  This has been a weird time.
--- So columns should be emp_no, salary at each to_date - hire_date
+-- Chi-squared exercise #3a
+SELECT 
+    departments.dept_name, dept_emp.emp_no, employees.gender
+FROM
+    departments
+        JOIN
+    dept_emp USING (dept_no)
+        JOIN
+    employees USING (emp_no)
+WHERE
+    dept_emp.to_date < NOW();
+    
+SELECT dept_name FROM departments;
+
+-- Chi squared exercise 3b
+SELECT 
+    employees.gender, COUNT(employees.gender) AS count
+FROM
+    employees
+        JOIN
+    dept_manager USING (emp_no)
+GROUP BY employees.gender;
